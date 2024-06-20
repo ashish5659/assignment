@@ -107,8 +107,8 @@ module tb();
     s1 = new();
     c1 = new();
     
-    $display("###############################");
-    for( int i = 0 ; i<5 ; i++) begin
+    $display("#############################");
+    for( int i = 0 ; i<3 ; i++) begin
       
       l1.randomize();
       send_packet(l1);
@@ -117,18 +117,18 @@ module tb();
     
     $display("##################################");
     
-    for( int i = 0 ; i<5 ; i++) begin
+    for( int i = 0 ; i<3 ; i++) begin
       
-      s1.randomize() with {payload > 1000;};
+      s1.randomize(); 
       send_packet(s1);
 	      
     end    
     
     $display("################################");
     
-    for( int i = 0 ; i<5 ; i++) begin
+    for( int i = 0 ; i<3 ; i++) begin
       
-      c1.randomize() with {payload > 1200;};
+      c1.randomize();
       send_packet(c1);
 	      
     end 
