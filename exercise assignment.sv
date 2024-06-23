@@ -18,6 +18,8 @@ initial begin
 end
 endmodule
 
+######################################################################################################
+
 /////////////////////////////Modify the solution for Exercise 1 to create a new class Exercise2 so that:
 data is always equal to 5
 The probability of address==0 is 10%
@@ -44,6 +46,7 @@ class Exercise;
      address dist {[1:14] := 80};
 endclass
 
+######################################################################################################
 
 
 
@@ -84,6 +87,66 @@ endclass
 
 
 
+######################################################################################################
+
+///////////////////////////////////////////////////////////////////////////////////////////A constraint that limits read transaction addresses to the range 0 to 7, inclusive.
+Write behavioral code to turn off the above constraint. Construct and randomize a MemTrans object with an in-line constraint that limits read transaction addresses to the range 0 to 8, inclusive. Test that the in-line constraint is working.
+/////////////////////////////////////
+class MemTrans;
+  rand bit [2:0] address;
+  constraint read_address_range {
+    address inside {[0:7]};
+  }
+endclass
+
+module testbench;
+  initial begin
+    MemTrans mem = new();
+    if (mem.randomize()) begin
+      $display("Randomization successful: address = %0d", mem.address);
+    end else begin
+      $display("Randomization failed");
+    end
+
+    // In-line constraint
+    if (mem.randomize() with {address inside {[0:8]};}) begin
+      $display("In-line constraint successful: address = %0d", mem.address);
+    end else begin
+      $display("In-line constraint failed");
+    end
+  end
+endmodule
+
+
+#########################################################################################################3
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Create a class for a graphics image that is 10x10 pixels. The value for each pixel can be randomized to black or white. Randomly generate an image that is, on average, 20% white. 
+  Print the image and report the number of pixels of each type.///////////////////////////////////////
+
+  
+class GraphicsImage;
+  rand bit [99:0] pixels; // 10x10 pixels
+
+  constraint pixel_distribution {
+    pixels.dist {0 := 80, 1 := 20};
+  }
+endclass
+
+module testbench;
+  initial begin
+    GraphicsImage img = new();
+    if (img.randomize()) begin
+      int white_count = 0;
+      for (int i = 0; i < 100; i++) begin
+        if (img.pixels[i]) white_count++;
+      end
+      $display("Generated image: %0d white pixels, %0d black pixels", white_count, 100 - white_count);
+    end else begin
+      $display("Randomization failed");
+    end
+  end
+endmodule
+######################################################################################################
 
 
 
@@ -93,6 +156,7 @@ endclass
 
 
 
+######################################################################################################
 /////////////////////////////////////////////////////////////////////////////////////////
 Create a class, StimData, containing an array of integer samples. Randomize the size and contents of the array, constraining the size to be between 1 and 1000. Test the constraint by generating 20 transactions and reporting the size.
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +179,8 @@ module testbench;
     end
   end
 endmodule
+
+######################################################################################################
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
